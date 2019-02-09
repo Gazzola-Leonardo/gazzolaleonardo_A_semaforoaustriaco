@@ -23,7 +23,9 @@ void setup() {
   pinMode(verde2, OUTPUT);
 }
 void loop() {
-  serialeRichiesta();
+  if(seriale == 0){
+    serialeRichiesta();
+  }
   Tempo1();
   delay(tempoVerde);  
   lampVerde2();
@@ -39,9 +41,10 @@ void serialeRichiesta() {
     serialeTempoTot();
     serialeGiallo();
     serialeNLampVerde();
+    seriale = 1;
 }
 void serialeTempoTot(){
-  Serial.println("Inserire la durata totale del semaforo(rosso + verde):");
+  Serial.println("Inserire la durata totale del semaforo(rosso e verde):");
   while(Serial.available() == 0);
     if (Serial.available() > 0){
       inserito = Serial.readString();
