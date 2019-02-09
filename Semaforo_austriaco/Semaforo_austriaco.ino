@@ -6,13 +6,11 @@ int giallo2 = 4;
 int verde2 = 2;
 
 String inserito;
-int tempoTot = 0;
 int tempoVerde = 0;
 int tempoGiallo = 0;
 int nLampVerde = 0;
 int durataLampVerde = 0;
 int seriale = 0;
-int somma = 0;
 
 void setup() {
   Serial.begin(9600);
@@ -25,9 +23,7 @@ void setup() {
   pinMode(verde2, OUTPUT);
 }
 void loop() {
-  if(seriale == 0){
-    serialeRichiesta();
-  }
+  serialeRichiesta();
   Tempo1();
   delay(tempoVerde);  
   lampVerde2();
@@ -40,36 +36,17 @@ void loop() {
   delay(tempoGiallo);
 }
 void serialeRichiesta() {
-  while(seriale == 0){
     serialeTempoTot();
     serialeGiallo();
     serialeNLampVerde();
-    sommaTempo();
-    if(somma < tempoTot){
-      calcoloTempoVerde(); 
-      seriale = 1;
-    }
-    else{
-      Serial.println("La durata totale del semaforo è minore della durata del semaforo giallo e i lampeggi di quello verde");
-      Serial.println("Reinserire i dati corretti:");
-      String inserito;
-      tempoTot = 0;
-      tempoVerde = 0;
-      tempoGiallo = 0;
-      nLampVerde = 0;
-      durataLampVerde = 0;
-      seriale = 0;
-      somma = 0;
-    }
-  }
 }
 void serialeTempoTot(){
-  Serial.println("Inserire la durata totale del semaforo:");
+  Serial.println("Inserire la durata totale del semaforo(rosso + verde):");
   while(Serial.available() == 0);
     if (Serial.available() > 0){
       inserito = Serial.readString();
       Serial.println(inserito.toInt());
-      tempoTot = inserito.toInt();
+      tempoVerde = inserito.toInt();
   }
 }
 void serialeGiallo(){
@@ -101,14 +78,6 @@ void serialeDurataLampVerde(){
       Serial.println(inserito.toInt());
       durataLampVerde = inserito.toInt();
     }
-}
-void sommaTempo(){
-  somma = somma + (2*tempoGiallo);
-  somma = somma + (durataLampVerde*nLampVerde*2);
-}
-void calcoloTempoVerde(){
-  tempoVerde = tempoTot - somma;
-  tempoVerde = tempoVerde/2;
 }
 void Tempo1() {
   digitalWrite(giallo1, LOW);
